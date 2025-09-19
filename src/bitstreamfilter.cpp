@@ -1,5 +1,6 @@
 #include "bitstreamfilter.h"
 #include "libavcodec/bsf.h"
+#include "packet.h"
 
 namespace av {
 // Move constructor
@@ -86,15 +87,18 @@ void BitStreamFilter::sendPacket(Packet& packet, OptionalErrorCode ec)
     }
 }
 
-void BitStreamFilter::receivePacket(Packet& packet, OptionalErrorCode ec)
+Packet BitStreamFilter::receivePacket(OptionalErrorCode ec)
 {
+    Packet packet;
     if (!isInitilized()) {
         throws_if(ec, Errors::BitStreamAllocFail);
-        return;
+        return packet;
     }
     if (auto ret = av_bsf_receive_packet(m_raw, packet.isNull() ? nullptr : packet.raw()); ret != 0) {
         throws_if(ec, ret, ffmpeg_category());
-        return;
+        return packet;
     }
+    packet.setComplete(true);
+    return packet;
 }
 } // namespace av

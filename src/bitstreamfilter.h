@@ -32,7 +32,7 @@ public:
     CodecParametersView codecParameters() const;
 
     void sendPacket(Packet& packet, OptionalErrorCode ec = throws());
-    void receivePacket(Packet& packet, OptionalErrorCode ec = throws());
+    Packet receivePacket(OptionalErrorCode ec = throws());
 
 private:
     bool m_is_initialized = false;
