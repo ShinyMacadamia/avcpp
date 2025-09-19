@@ -20,17 +20,17 @@ public:
     BitStreamFilter& operator=(BitStreamFilter&& other);
     ~BitStreamFilter();
 
-    void setName(std::string_view name, OptionalErrorCode ec);
+    void setName(std::string_view name, OptionalErrorCode ec = throws());
 
-    void setInCodecParameters(CodecParametersView codecpar, OptionalErrorCode ec);
-    void setOutCodecParameters(CodecParametersView codecpar, OptionalErrorCode ec);
+    void setInCodecParameters(CodecParametersView codecpar, OptionalErrorCode ec = throws());
+    void setOutCodecParameters(CodecParametersView codecpar, OptionalErrorCode ec = throws());
 
     void init();
 
     bool isInitilized() const;
 
-    void sendPacket(Packet& packet, OptionalErrorCode ec);
-    void receivePacket(Packet& packet, OptionalErrorCode ec);
+    void sendPacket(Packet& packet, OptionalErrorCode ec = throws());
+    void receivePacket(Packet& packet, OptionalErrorCode ec = throws());
 
 private:
     bool m_is_initialized = false;
