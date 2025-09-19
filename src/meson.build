@@ -54,6 +54,7 @@ avcpp_sources = [
     'averror.cpp',
     'avtime.cpp',
     'avutils.cpp',
+    'bitstreamfilter.cpp',
     'channellayout.cpp',
     'codeccontext.cpp',
     'codec.cpp',
