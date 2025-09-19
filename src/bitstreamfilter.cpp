@@ -69,6 +69,11 @@ bool BitStreamFilter::isInitilized() const
     return m_is_initialized;
 }
 
+CodecParametersView BitStreamFilter::codecParameters() const
+{
+    return m_raw ? m_raw->par_out : nullptr;
+}
+
 void BitStreamFilter::sendPacket(Packet& packet, OptionalErrorCode ec)
 {
     if (!isInitilized()) {
