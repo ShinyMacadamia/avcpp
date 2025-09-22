@@ -1,4 +1,5 @@
 #include "bitstreamfilter.h"
+#include "averror.h"
 #include "libavcodec/bsf.h"
 #include "packet.h"
 
@@ -60,9 +61,13 @@ void BitStreamFilter::setOutCodecParameters(CodecParametersView codecpar, Option
     }
 }
 
-void BitStreamFilter::init()
+void BitStreamFilter::init(OptionalErrorCode ec)
 {
-    av_bsf_init(m_raw);
+    if (auto ret = av_bsf_init(m_raw); ret != 0) {
+        throws_if(ec, ret, ffmpeg_category());
+        return;
+    }
+    m_is_initialized = true;
 }
 
 bool BitStreamFilter::isInitilized() const

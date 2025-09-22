@@ -25,7 +25,7 @@ public:
     void setInCodecParameters(CodecParametersView codecpar, OptionalErrorCode ec = throws());
     void setOutCodecParameters(CodecParametersView codecpar, OptionalErrorCode ec = throws());
 
-    void init();
+    void init(OptionalErrorCode ec = throws());
 
     bool isInitilized() const;
 
