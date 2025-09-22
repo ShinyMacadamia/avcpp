@@ -99,7 +99,7 @@ Packet BitStreamFilter::receivePacket(OptionalErrorCode ec)
         throws_if(ec, Errors::BitStreamAllocFail);
         return packet;
     }
-    if (auto ret = av_bsf_receive_packet(m_raw, packet.isNull() ? nullptr : packet.raw()); ret != 0) {
+    if (auto ret = av_bsf_receive_packet(m_raw, packet.raw()); ret != 0) {
         throws_if(ec, ret, ffmpeg_category());
         return packet;
     }
