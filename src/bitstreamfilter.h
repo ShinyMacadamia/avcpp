@@ -34,7 +34,7 @@ public:
 
     void init(OptionalErrorCode ec = throws());
 
-    bool isInitilized() const;
+    bool isAllocated() const;
 
     CodecParametersView codecParameters() const;
 
@@ -42,7 +42,7 @@ public:
     Packet receivePacket(OptionalErrorCode ec = throws());
 
 private:
-    bool m_is_initialized = false;
+    bool m_is_allocated = false;
 };
 
 } // namespace av

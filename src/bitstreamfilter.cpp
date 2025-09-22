@@ -8,16 +8,16 @@ namespace av {
 BitStreamFilter::BitStreamFilter(BitStreamFilter&& other)
 {
     m_raw = other.m_raw;
-    m_is_initialized = other.m_is_initialized;
+    m_is_allocated = other.m_is_allocated;
     other.reset();
-    other.m_is_initialized = false;
+    other.m_is_allocated = false;
 }
 
 // Free swap for lvalues (needed so std::swap(*this, other) works)
 void swap(BitStreamFilter& lhs, BitStreamFilter& rhs) noexcept
 {
     std::swap(lhs.m_raw, rhs.m_raw);
-    std::swap(lhs.m_is_initialized, rhs.m_is_initialized);
+    std::swap(lhs.m_is_allocated, rhs.m_is_allocated);
 }
 
 BitStreamFilter& BitStreamFilter::operator=(BitStreamFilter&& other)
@@ -45,6 +45,7 @@ void BitStreamFilter::setName(std::string_view name, OptionalErrorCode ec)
         throws_if(ec, Errors::BitStreamAllocFail);
         return;
     }
+    m_is_allocated = true;
 }
 
 void BitStreamFilter::setInCodecParameters(CodecParametersView codecpar, OptionalErrorCode ec)
@@ -63,22 +64,22 @@ void BitStreamFilter::setOutCodecParameters(CodecParametersView codecpar, Option
 
 void BitStreamFilter::inTimeBase(const Rational& time_base) noexcept
 {
-    RAW_SET2(isInitilized(), time_base_in, time_base.getValue());
+    RAW_SET2(isAllocated(), time_base_in, time_base.getValue());
 }
 
 void BitStreamFilter::outTimeBase(const Rational& time_base) noexcept
 {
-    RAW_SET2(isInitilized(), time_base_out, time_base.getValue());
+    RAW_SET2(isAllocated(), time_base_out, time_base.getValue());
 }
 
 Rational BitStreamFilter::inTimeBase()
 {
-    return RAW_GET2(isInitilized(), time_base_in, AVRational());
+    return RAW_GET2(isAllocated(), time_base_in, AVRational());
 }
 
 Rational BitStreamFilter::outTimeBase()
 {
-    return RAW_GET2(isInitilized(), time_base_out, AVRational());
+    return RAW_GET2(isAllocated(), time_base_out, AVRational());
 }
 
 void BitStreamFilter::init(OptionalErrorCode ec)
@@ -87,12 +88,11 @@ void BitStreamFilter::init(OptionalErrorCode ec)
         throws_if(ec, ret, ffmpeg_category());
         return;
     }
-    m_is_initialized = true;
 }
 
-bool BitStreamFilter::isInitilized() const
+bool BitStreamFilter::isAllocated() const
 {
-    return m_is_initialized;
+    return m_is_allocated;
 }
 
 CodecParametersView BitStreamFilter::codecParameters() const
@@ -102,7 +102,7 @@ CodecParametersView BitStreamFilter::codecParameters() const
 
 void BitStreamFilter::sendPacket(Packet& packet, OptionalErrorCode ec)
 {
-    if (!isInitilized()) {
+    if (!isAllocated()) {
         throws_if(ec, Errors::BitStreamAllocFail);
         return;
     }
@@ -115,7 +115,7 @@ void BitStreamFilter::sendPacket(Packet& packet, OptionalErrorCode ec)
 Packet BitStreamFilter::receivePacket(OptionalErrorCode ec)
 {
     Packet packet;
-    if (!isInitilized()) {
+    if (!isAllocated()) {
         throws_if(ec, Errors::BitStreamAllocFail);
         return packet;
     }
