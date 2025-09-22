@@ -61,6 +61,26 @@ void BitStreamFilter::setOutCodecParameters(CodecParametersView codecpar, Option
     }
 }
 
+void BitStreamFilter::inTimeBase(const Rational& time_base) noexcept
+{
+    RAW_SET2(isInitilized(), time_base_in, time_base.getValue());
+}
+
+void BitStreamFilter::outTimeBase(const Rational& time_base) noexcept
+{
+    RAW_SET2(isInitilized(), time_base_out, time_base.getValue());
+}
+
+Rational BitStreamFilter::inTimeBase()
+{
+    return RAW_GET2(isInitilized(), time_base_in, AVRational());
+}
+
+Rational BitStreamFilter::outTimeBase()
+{
+    return RAW_GET2(isInitilized(), time_base_out, AVRational());
+}
+
 void BitStreamFilter::init(OptionalErrorCode ec)
 {
     if (auto ret = av_bsf_init(m_raw); ret != 0) {

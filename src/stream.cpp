@@ -1,9 +1,8 @@
-#include "formatcontext.h"
-#include "codeccontext.h"
 #include "stream.h"
+#include "codeccontext.h"
+#include "formatcontext.h"
 
-namespace av
-{
+namespace av {
 
 Stream::Stream(const std::shared_ptr<char> &monitor, AVStream *st, Direction direction)
     : FFWrapperPtr<AVStream>(st),
@@ -29,22 +28,22 @@ int Stream::id() const
 
 Rational Stream::frameRate() const
 {
-    return RAW_GET2(isValid(), r_frame_rate, AVRational{});
+    return RAW_GET2(isValid(), r_frame_rate, AVRational {});
 }
 
 Rational Stream::timeBase() const
 {
-    return RAW_GET2(isValid(), time_base, AVRational{});
+    return RAW_GET2(isValid(), time_base, AVRational {});
 }
 
 Rational Stream::sampleAspectRatio() const
 {
-    return RAW_GET2(isValid(), sample_aspect_ratio, AVRational{});
+    return RAW_GET2(isValid(), sample_aspect_ratio, AVRational {});
 }
 
 Rational Stream::averageFrameRate() const
 {
-    return RAW_GET2(isValid(), avg_frame_rate, AVRational{});
+    return RAW_GET2(isValid(), avg_frame_rate, AVRational {});
 }
 
 Timestamp Stream::startTime() const
@@ -168,5 +167,4 @@ void Stream::setupEncodingParameters(const VideoEncoderContext &ctx, OptionalErr
     codecParameters().copyFrom(ctx);
 }
 
-} // ::av
-
+} // namespace av

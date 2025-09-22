@@ -5,6 +5,8 @@
 #include "codecparameters.h"
 #include "ffmpeg.h"
 #include "packet.h"
+#include "rational.h"
+#include <libavutil/rational.h>
 #include <string_view>
 extern "C" {
 #include <libavcodec/bsf.h>
@@ -24,6 +26,11 @@ public:
 
     void setInCodecParameters(CodecParametersView codecpar, OptionalErrorCode ec = throws());
     void setOutCodecParameters(CodecParametersView codecpar, OptionalErrorCode ec = throws());
+
+    void inTimeBase(const Rational& time_base) noexcept;
+    void outTimeBase(const Rational& time_base) noexcept;
+    Rational inTimeBase();
+    Rational outTimeBase();
 
     void init(OptionalErrorCode ec = throws());
 
