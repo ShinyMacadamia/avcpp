@@ -1,5 +1,6 @@
 #include "stream.h"
 #include "codeccontext.h"
+#include "ffmpeg.h"
 #include "formatcontext.h"
 
 namespace av {
@@ -119,6 +120,11 @@ void Stream::setSampleAspectRatio(const Rational &aspectRatio)
 void Stream::setAverageFrameRate(const Rational &frameRate)
 {
     RAW_SET2(isValid(), avg_frame_rate, frameRate.getValue());
+}
+
+void Stream::setID(int id)
+{
+    RAW_SET2(isValid(), id, id);
 }
 
 CodecParametersView Stream::codecParameters() const
